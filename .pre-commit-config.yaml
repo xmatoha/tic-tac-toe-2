@@ -1,0 +1,12 @@
+repos:
+- repo: https://github.com/ibm/detect-secrets
+  rev: b9b54b07b6661347273c48913d4dbf9f85daafb0
+  hooks:
+    - id: detect-secrets # pragma: whitelist secret
+      args: [--baseline, .secrets.baseline, --use-all-plugins]
+- repo: https://github.com/compilerla/conventional-pre-commit
+  rev: 6c04e68
+  hooks:
+    - id: conventional-pre-commit
+      stages: [commit-msg]
+      args: [] # optional: list of Conventional Commits types to allow

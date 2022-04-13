@@ -12,4 +12,4 @@
            :test-paths          ["test/features"]
            :cucumber/glue-paths ["test/steps_definitions"]}]
   :plugins [:kaocha.plugin/cloverage :kaocha.plugin/notifier]
-  :reporter [kaocha.report/documentation kaocha.report.progress/report]}
+  :reporter [kaocha.report/documentation]}

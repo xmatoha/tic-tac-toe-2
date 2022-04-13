@@ -49,3 +49,9 @@
                     (won? :x)))))
   (testing "given not winning board won should be false"
     (is (= false (-> (won? (empty-board 3) :x))))))
+
+(deftest board-operations-tests
+  (testing "given coordinates it should return cell on board"
+    (is (= {:state :x :offset 4} (-> (empty-board 3)
+                                     (occupy 1 1 :x)
+                                     (board-elem-at 1 1))))))

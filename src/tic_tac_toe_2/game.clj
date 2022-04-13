@@ -17,6 +17,10 @@
   (let [offset (calc-offset row column board)]
     (assoc-in board [offset :state] who)))
 
+(defn board-elem-at [board row col]
+  (println "board: " board "row: " row "col: " col)
+  (get board (calc-offset row col board)))
+
 (defn row [board row-offset]
   (subvec board
           (calc-offset row-offset 0 board)

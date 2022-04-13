@@ -1,0 +1,75 @@
+** Pomodoro 1
+:LOGBOOK:
+CLOCK: [2022-04-12 Tue 09:20]--[2022-04-12 Tue 09:45] =>  0:25
+:END:
+*** Goal - improve bootstrap
+- [X] general lein template setup
+- [ ] secrets check
+- [ ] linting
+- [ ] check for conventional commits
+- [ ] unit tests
+- [ ] snyk 
+- [ ] kaocha testing framework default setup
+** Pomodoro 2
+:LOGBOOK:
+CLOCK: [2022-04-12 Tue 09:20]--[2022-04-12 Tue 09:45] =>  0:25
+:END:
+*** Goal - improve bootstrap
+- [X] general lein template setup
+- [X] secrets check
+- [ ] linting
+- [X] check for conventional commits
+- [X] unit tests
+- [ ] snyk 
+- [ ] trivy
+- [X] kaocha testing framework default setup
+
+
+
+** Pomodoro 3
+*** Goal - improve bootstrap, experiment with ci/cd
+:LOGBOOK:
+CLOCK: [2022-04-12 Tue 15:06]--[2022-04-12 Tue 15:31] =>  0:25
+:END:
+- [X] general lein template setup
+- [X] secrets check
+- [X] linting
+- [X] check for conventional commits
+- [X] unit tests
+- [ ] snyk  (use trivy instead)
+- [ ] trivy
+- [X] kaocha testing framework default setup
+- [ ] build
+- [ ] deploy
+** Pomodoro 4
+*** Goal - finish bootstrap
+- [X] general lein template setup
+- [X] secrets check
+- [X] linting
+- [X] check for conventional commits
+- [X] unit tests
+- [ ] trivy
+- [X] kaocha testing framework default setup
+- [X] build
+- [X] deploy
+** Pomodoro 5
+*** Goal - start bdd
+- [X] create scenarios
+- [ ] from outside in reafactoring and covering missing coverage with
+  unit tests
+
+
+** Pomodoro 6
+*** Goal - start bdd
+:LOGBOOK:
+CLOCK: [2022-04-13 Wed 09:36]
+:END:
+- [X] do basic unit test coverage before bdd
+- [ ] game rules scenarios
+- [ ] refactor, split bot rules from game rules
+** Pomodoro 7
+*** Goal - refactoring towards extracting bot rules outside of game loop
+- [ ] enable ci
+- [ ] game rules scenarios
+- [ ] refactor, split bot rules from game rules i.e current state +
+  move equals new state so move is comming from outside

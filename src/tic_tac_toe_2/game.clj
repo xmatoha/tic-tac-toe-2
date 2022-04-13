@@ -129,8 +129,8 @@
   (cond (= (:winner game-state) nil) "GAME ENDS WITH A DRAW!"
         :else (str "PLAYER " (:winner game-state) " WON")))
 
-(defn game-loop []
-  (loop [game-state (new-game :x) game []]
+(defn game-loop [size]
+  (loop [game-state (new-game size) game []]
     (if (= nil (:game-over game-state))
       (recur  (game-round game-state) (conj game game-state))
       (conj game game-state))))

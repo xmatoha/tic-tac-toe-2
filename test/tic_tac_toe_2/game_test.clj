@@ -16,3 +16,9 @@
              {:offset 7, :state :e}
              {:offset 8, :state :e}]} (sut/new-game :x 3))))
 
+(t/deftest game-loop-tests
+  (t/testing "game should finish "
+    (t/is (= true (:game-over (last  (sut/game-loop 3))))))
+  (t/testing "game should have a winner declared"
+    (t/is (some? (:winner (last  (sut/game-loop 3)))))))
+

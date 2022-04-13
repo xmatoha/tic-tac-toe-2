@@ -16,6 +16,10 @@
            {:offset 7, :state :e}
            {:offset 8, :state :e}]} (new-game  3))))
 
+(deftest game-rules-tests
+  (testing "if current player is x after game-round next player is o"
+    (is (= :o (:next-player (game-round {:next-player :x :current-board (empty-board 3)}))))))
+
 (deftest game-loop-tests
   (testing "game should finish "
     (is (= true (:game-over (last  (game-loop 3))))))
@@ -55,3 +59,11 @@
     (is (= {:state :x :offset 4} (-> (empty-board 3)
                                      (occupy 1 1 :x)
                                      (board-elem-at 1 1))))))
+
+(deftest player-move-tests
+  (testing "given board player when player random move there is one less free cells on board"
+    (is (= 8  (->> (:current-board (make-random-move (new-game 3)))
+                   (filter #(= (:state %) :e))
+                   (count))))))
+
+

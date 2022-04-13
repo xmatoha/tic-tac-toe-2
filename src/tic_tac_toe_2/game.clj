@@ -81,12 +81,18 @@
 (defn empty-cells [board]
   (vec (filter (fn [e]  (= (:state e) :e)) board)))
 
-(defn make-move [board who]
-  (let [ec (empty-cells board)]
+(defn make-move [game-state where]
+  (assoc-in game-state
+            [:current-board where
+             :state] (:next-player game-state)))
+
+(defn random-board-offset [game-state]
+  (let [ec (empty-cells (:current-board game-state))]
     (if (> (count ec) 0)
-      (assoc-in board
-                [(:offset (get ec (Math/round (rand (- (count ec) 1)))))
-                 :state] who) board)))
+      (:offset (get ec (Math/round (rand (- (count ec) 1))))) -1)))
+
+(defn make-random-move [game-state]
+  (make-move game-state (random-board-offset game-state)))
 
 (defn row-to-string [row]
   (->>
@@ -111,21 +117,19 @@
         (assoc game-state :winner :o :game-over true)
         :else game-state))
 
-;; (defn game-over? [game-state]
-;;   (cond (not (= nil (:winner game-state)))
-;;         (assoc game-state :game-over true)
-;;         :else game-state))
-
 (defn board-full? [game-state]
-  (if (= (count (empty-cells (:current-board game-state))) 0) (assoc game-state :board-full true :game-over true) game-state))
+  (if (= (count (empty-cells (:current-board game-state))) 0)
+    (assoc game-state :board-full true :game-over true) game-state))
+
+(defn next-player [game-state]
+  (if (= :x (:next-player game-state))
+    (assoc game-state :next-player :o)
+    (assoc game-state :next-player :x)))
 
 (defn game-round [game-state]
   (-> game-state
-      (assoc  :current-board
-              (make-move (:current-board game-state) (:next-player game-state)))
-      (assoc
-       :next-player
-       (if (= :x (:next-player game-state)) :o :x))
+      (make-random-move)
+      (next-player)
       (board-full?)
       (winner?)))
 

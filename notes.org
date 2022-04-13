@@ -69,7 +69,12 @@ CLOCK: [2022-04-13 Wed 09:36]
 - [ ] refactor, split bot rules from game rules
 ** Pomodoro 7
 *** Goal - refactoring towards extracting bot rules outside of game loop
-- [ ] enable ci
+- [X] enable ci
 - [ ] game rules scenarios
+- [ ] refactor, split bot rules from game rules i.e current state +
+  move equals new state so move is comming from outside
+** Pomodoro 8
+*** Goal extract move 
+- [ ] random move
 - [ ] refactor, split bot rules from game rules i.e current state +
   move equals new state so move is comming from outside

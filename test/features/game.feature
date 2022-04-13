@@ -6,8 +6,8 @@ Feature: Game rules
          And User X is first player to make a move
 
 
-    # Scenario: Player change turns after each round
-    #     Given Current X is user who suppose to make a move
-    #     When User X makes move
-    #     Then Next player who suppose to make a muve is user O
+    Scenario: Player change turns after each round
+        Given X is user who suppose to make a move
+        When User X makes move
+        Then Next player who suppose to make a move is user O
 

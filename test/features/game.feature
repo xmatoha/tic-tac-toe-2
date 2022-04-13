@@ -6,4 +6,7 @@ Feature: Game rules
         And new board of size 3 is created
         And board is empty
 
-
+    Scenario: Game rules - player turns
+        Given Current round user is x
+        When When user makes move
+        Then Current round player changes to o

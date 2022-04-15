@@ -81,9 +81,9 @@
 (defn empty-cells [board]
   (vec (filter (fn [e]  (= (:state e) :e)) board)))
 
-(defn make-move [game-state where]
+(defn make-move [game-state action]
   (assoc-in game-state
-            [:current-board where
+            [:current-board (:offset action)
              :state] (:next-player game-state)))
 
 (defn random-board-offset [game-state]
@@ -92,7 +92,49 @@
       (:offset (get ec (Math/round (rand (- (count ec) 1))))) -1)))
 
 (defn make-random-move [game-state]
-  (make-move game-state (random-board-offset game-state)))
+  (make-move game-state {:offset (random-board-offset game-state)}))
+
+(defn new-game [size]
+  {:next-player :x
+   :current-board (empty-board size)
+   :winner nil
+   :game-over false})
+
+(defn winner? [game-state]
+  (cond (won? (:current-board game-state) :x)
+        (assoc game-state :winner :x :game-over true)
+        (won? (:current-board game-state) :o)
+        (assoc game-state :winner :o :game-over true)
+        :else game-state))
+
+(defn board-full? [game-state]
+  (if (= (count (empty-cells (:current-board game-state))) 0)
+    (assoc game-state :board-full true :game-over true) game-state))
+
+(defn switch-player [game-state]
+  (if (= :x (:next-player game-state))
+    (assoc game-state :next-player :o)
+    (assoc game-state :next-player :x)))
+
+(defn game-round [game-state action]
+  (-> game-state
+      (make-move action)
+      (switch-player)
+      (board-full?)
+      (winner?)))
+
+(defn game-over? [game-state]
+  (:game-over game-state))
+
+(defn random-move [game-state]
+  {:offset (random-board-offset game-state) :player (:next-player game-state)})
+
+(defn bot-game [size]
+  (loop [game-state (new-game size)
+         game []]
+    (if (game-over? game-state)
+      (conj game game-state)
+      (recur  (game-round game-state (random-move game-state)) (conj game game-state)))))
 
 (defn row-to-string [row]
   (->>
@@ -107,41 +149,9 @@
         (for [r (range 0 (calc-board-size board))]
           (row-to-string (row board r)))))
 
-(defn new-game [size]
-  {:next-player :x :current-board (empty-board size)})
-
-(defn winner? [game-state]
-  (cond (won? (:current-board game-state) :x)
-        (assoc game-state :winner :x :game-over true)
-        (won? (:current-board game-state) :o)
-        (assoc game-state :winner :o :game-over true)
-        :else game-state))
-
-(defn board-full? [game-state]
-  (if (= (count (empty-cells (:current-board game-state))) 0)
-    (assoc game-state :board-full true :game-over true) game-state))
-
-(defn next-player [game-state]
-  (if (= :x (:next-player game-state))
-    (assoc game-state :next-player :o)
-    (assoc game-state :next-player :x)))
-
-(defn game-round [game-state]
-  (-> game-state
-      (make-random-move)
-      (next-player)
-      (board-full?)
-      (winner?)))
-
 (defn print-winner [game-state]
   (cond (= (:winner game-state) nil) "GAME ENDS WITH A DRAW!"
         :else (str "PLAYER " (:winner game-state) " WON")))
-
-(defn game-loop [size]
-  (loop [game-state (new-game size) game []]
-    (if (= nil (:game-over game-state))
-      (recur  (game-round game-state) (conj game game-state))
-      (conj game game-state))))
 
 (defn display-game [rounds]
   (println "**************************************")

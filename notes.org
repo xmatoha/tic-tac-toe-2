@@ -61,9 +61,6 @@ CLOCK: [2022-04-12 Tue 15:06]--[2022-04-12 Tue 15:31] =>  0:25
 
 ** Pomodoro 6
 *** Goal - start bdd
-:LOGBOOK:
-CLOCK: [2022-04-13 Wed 09:36]
-:END:
 - [X] do basic unit test coverage before bdd
 - [ ] game rules scenarios
 - [ ] refactor, split bot rules from game rules
@@ -75,6 +72,11 @@ CLOCK: [2022-04-13 Wed 09:36]
   move equals new state so move is comming from outside
 ** Pomodoro 8
 *** Goal extract move 
-- [ ] random move
-- [ ] refactor, split bot rules from game rules i.e current state +
+- [X] random move
+- [X] refactor, split bot rules from game rules i.e current state +
   move equals new state so move is comming from outside
+** Pomodor 9
+*** Goal build universal game feature
+- [ ] feature scenarios for game initiation where game style can be
+    human against human
+

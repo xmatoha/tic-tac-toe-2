@@ -3,28 +3,29 @@
             [clojure.test :refer :all]))
 
 (deftest game-initialization-tests
-  (testing "given board size and player we should get back initial game state")
-  (is (= {:next-player :x,
-          :current-board
-          [{:offset 0, :state :e}
-           {:offset 1, :state :e}
-           {:offset 2, :state :e}
-           {:offset 3, :state :e}
-           {:offset 4, :state :e}
-           {:offset 5, :state :e}
-           {:offset 6, :state :e}
-           {:offset 7, :state :e}
-           {:offset 8, :state :e}]} (new-game  3))))
+  (testing "given board size"
+    (let [game (new-game  3)]
+      (testing "we should get back initial game state with following properties"
+        (testing "game is not over"
+          (is (= false (:game-over game))))
+        (testing "winner is not defined"
+          (is (= nil (:winner game))))
+        (testing "first player to take a turn is x"
+          (is (= :x (:next-player game))))
+        (testing "board is empty"
+          (is (= 9 (->> (:current-board game)
+                        (filter #(= :e (:state %)))
+                        (count)))))))))
 
 (deftest game-rules-tests
   (testing "if current player is x after game-round next player is o"
-    (is (= :o (:next-player (game-round {:next-player :x :current-board (empty-board 3)}))))))
+    (is (= :o (:next-player (game-round (new-game 3) {:offset 1 :player :x}))))))
 
 (deftest game-loop-tests
   (testing "game should finish "
-    (is (= true (:game-over (last  (game-loop 3))))))
+    (is (= true (:game-over (last  (bot-game 3))))))
   (testing "game should have a winner declared"
-    (is (some? (:winner (last  (game-loop 3)))))))
+    (is (some? (:winner (last  (bot-game 3)))))))
 
 (deftest game-state-tests
   (testing "given row winnig board it should evaluate it properly"

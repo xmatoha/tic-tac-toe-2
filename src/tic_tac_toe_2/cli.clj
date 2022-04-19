@@ -1,6 +1,6 @@
 (ns tic-tac-toe-2.cli
   (:require [clojure.string :refer [join upper-case]]
-            [tic-tac-toe-2.game :refer :all]))
+            [tic-tac-toe-2.game :refer [calc-board-size row]]))
 
 (defn row-to-string [row]
   (->>

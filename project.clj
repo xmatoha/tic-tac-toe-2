@@ -6,6 +6,8 @@
                  [ring/ring-jetty-adapter "1.7.1"]
                  [aleph "0.4.7-alpha5"]
                  [metosin/reitit "0.5.17"]
+                 [clj-http "3.12.3"]
+                 [cheshire "5.10.2"]
                  [lambdaisland/kaocha-cucumber "0.0-53"]
                  [lambdaisland/kaocha-cloverage "1.0.75"]
                  [nubank/mockfn "0.7.0"]]

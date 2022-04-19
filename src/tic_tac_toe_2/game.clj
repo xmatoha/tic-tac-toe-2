@@ -1,5 +1,4 @@
-(ns tic-tac-toe-2.game
-  (:require [clojure.string :refer [join upper-case]]))
+(ns tic-tac-toe-2.game)
 
 (defn empty-board [board-size]
   (->>

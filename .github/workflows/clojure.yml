@@ -37,6 +37,5 @@ jobs:
         heroku_email: "martin.hablak@gmail.com"
         usedocker: true
         healtcheck: "https://xpfarm-tictactoe-api.herokuapp.com/health"
-        delay: 15
         docker_build_args: |
           VERSION

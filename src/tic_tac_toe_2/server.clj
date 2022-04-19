@@ -11,7 +11,10 @@
 (def app
   (http/ring-handler
    (http/router
-    [["/health"
+    [["/"
+      {:get {:summary "root"
+             :handler (fn [_] {:status 200 :body {}})}}]
+     ["/health"
       {:get {:summary "healthcheck endpoint"
              :handler health-handler}}]])
 
@@ -20,8 +23,8 @@
     :interceptors [(muuntaja.interceptor/format-interceptor)]}))
 
 (defn server-start [options]
-  (println "Starting server ...")
-  (reset! server-handle (jetty/run-jetty #'app {:port (Integer/parseInt (get options "PORT")), :join? false, :async true})))
+  (println (str "Starting server on port " (get options "PORT")))
+  (reset! server-handle (jetty/run-jetty #'app {:host "0.0.0.0" :port (Integer/parseInt (get options "PORT")), :join? false, :async true})))
 
 (defn server-stop []
   (println "Stopping server ...")

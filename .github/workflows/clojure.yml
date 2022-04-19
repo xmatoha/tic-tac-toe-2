@@ -36,5 +36,6 @@ jobs:
         heroku_app_name: "xpfarm-tictactoe-api"
         heroku_email: "martin.hablak@gmail.com"
         usedocker: true
+        healthcheck: true
         docker_build_args: |
           VERSION

@@ -17,8 +17,11 @@
   (let [offset (calc-offset row column board)]
     (assoc-in board [offset :state] who)))
 
+(defn occupy-game [game row column who]
+  (let [offset (calc-offset row column (:current-board game))]
+    (assoc-in game [:current-board offset :state] who)))
+
 (defn board-elem-at [board row col]
-  (println "board: " board "row: " row "col: " col)
   (get board (calc-offset row col board)))
 
 (defn row [board row-offset]
@@ -100,31 +103,44 @@
    :winner nil
    :game-over false})
 
-(defn winner? [game-state]
+(defn winner! [game-state]
   (cond (won? (:current-board game-state) :x)
-        (assoc game-state :winner :x :game-over true)
+        (assoc game-state :winner :x)
         (won? (:current-board game-state) :o)
-        (assoc game-state :winner :o :game-over true)
+        (assoc game-state :winner :o)
         :else game-state))
 
-(defn board-full? [game-state]
-  (if (= (count (empty-cells (:current-board game-state))) 0)
-    (assoc game-state :board-full true :game-over true) game-state))
+(defn winner? [game-state]
+  (:winner game-state))
 
-(defn switch-player [game-state]
+(defn board-full! [game-state]
+  (if (= (count (empty-cells (:current-board game-state))) 0)
+    (assoc game-state :board-full true) game-state))
+
+(defn board-full? [game-state]
+  (if (:board-full game-state) true false))
+
+(defn switch-player! [game-state]
   (if (= :x (:next-player game-state))
     (assoc game-state :next-player :o)
     (assoc game-state :next-player :x)))
 
-(defn game-round [game-state action]
-  (-> game-state
-      (make-move action)
-      (switch-player)
-      (board-full?)
-      (winner?)))
+(defn game-over! [game-state]
+  (cond
+    (winner? game-state) (assoc game-state :game-over true)
+    (board-full? game-state) (assoc game-state :game-over true)
+    :else game-state))
 
 (defn game-over? [game-state]
   (:game-over game-state))
+
+(defn game-round [game-state action]
+  (-> game-state
+      (make-move action)
+      (switch-player!)
+      (board-full!)
+      (winner!)
+      (game-over!)))
 
 (defn random-move [game-state]
   {:offset (random-board-offset game-state) :player (:next-player game-state)})

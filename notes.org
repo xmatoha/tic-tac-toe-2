@@ -80,3 +80,19 @@ CLOCK: [2022-04-12 Tue 15:06]--[2022-04-12 Tue 15:31] =>  0:25
 - [ ] feature scenarios for game initiation where game style can be
     human against human
 
+#+name: b1
+#+begin_src python :results value scalar
+x = 2
+
+#+end_src
+
+#+begin_src javascript :var input=b1
+2*%S
+
+#+end_src
+
+
+* Hihglights
+- 1. refactoring, extracting bot random move logic from game loop
+- 2. refactoring, make game state universal interface how game progresses
+- 3. build new game with possiblity to play human vs human

@@ -67,4 +67,24 @@
                    (filter #(= (:state %) :e))
                    (count))))))
 
+(deftest eval-game-round-tests
+  (testing "after game round finished evaluate if game ended"
+    (testing "if there is winner defined, game ends"
+      (is (= true
+             (game-over? (-> (new-game 3)
+                             (occupy-game 0 0 :x)
+                             (occupy-game 0 1 :x)
+                             (game-round {:offset 2 :player :x}))))))
 
+    (testing "if there is not free cell on board and there is no winner defined, game ends with draw"
+      (is (= true
+             (game-over? (-> (new-game 3)
+                             (occupy-game 0 0 :x)
+                             (occupy-game 0 1 :o)
+                             (occupy-game 0 2 :x)
+                             (occupy-game 1 0 :x)
+                             (occupy-game 1 1 :o)
+                             (occupy-game 1 2 :x)
+                             (occupy-game 2 0 :o)
+                             (occupy-game 2 1 :o)
+                             (game-round {:offset 8 :player :x}))))))))

@@ -1,4 +1,4 @@
-(defproject tic-tac-toe-2 "0.0.1"
+(defproject tic-tac-toe-2 "1.0.0"
   :description "tic tac toe kata"
   :dependencies [[org.clojure/clojure "1.10.3"]
                  [clj-kondo "2022.03.09"]

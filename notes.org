@@ -75,21 +75,15 @@ CLOCK: [2022-04-12 Tue 15:06]--[2022-04-12 Tue 15:31] =>  0:25
 - [X] random move
 - [X] refactor, split bot rules from game rules i.e current state +
   move equals new state so move is comming from outside
-** Pomodor 9
+** Pomodoro 9
 *** Goal build universal game feature
-- [ ] feature scenarios for game initiation where game style can be
+- [X] feature scenarios for game initiation where game style can be
     human against human
 
-#+name: b1
-#+begin_src python :results value scalar
-x = 2
-
-#+end_src
-
-#+begin_src javascript :var input=b1
-2*%S
-
-#+end_src
+** Pomodoro 10
+*** Goal build base api
+- [ ] healthcheck endpoint
+- [ ] game creation
 
 
 * Hihglights

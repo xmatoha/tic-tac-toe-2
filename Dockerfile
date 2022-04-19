@@ -5,6 +5,6 @@ WORKDIR /opt/app
 COPY . .
 RUN lein bump-version ${VERSION}
 RUN lein uberjar
-RUN cp target/uberjar/tic-tac-toe-${VERSION}-standalone.jar tic-tac-toe.jar
+RUN cp target/uberjar/tic-tac-toe-2-${VERSION}-standalone.jar tic-tac-toe.jar
 RUN chgrp root /opt/app && chmod ug+rwX /opt/app && chmod a+rX /opt/app
 CMD ["java", "-jar", "tic-tac-toe.jar"]

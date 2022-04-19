@@ -14,4 +14,7 @@
 
 (deftest ^:integration test-server-healtcheck
   (testing "given port as env var it should start server at that port and respond to healtcheck endpoint"
-    (is (= 200 (:status (http-client/get (str "http://localhost:" port "/health")))))))
+    (is (= 200 (:status
+                (http-client/get
+                 (str "http://localhost:" port "/health")))))))
+

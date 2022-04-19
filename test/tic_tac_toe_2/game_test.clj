@@ -25,9 +25,10 @@
   (testing "game should finish "
     (is (= true (:game-over (last  (bot-game 3))))))
   (testing "game should have a winner declared or should have all cells occupied"
-    (is (or
-         (some? (:winner (last  (bot-game 3))))
-         (board-full? (last  (bot-game 3)))))))
+    (let [game (last  (bot-game 3))]
+      (is (or
+           (some? (:winner game))
+           (board-full? game))))))
 
 (deftest game-state-tests
   (testing "given row winnig board it should evaluate it properly"

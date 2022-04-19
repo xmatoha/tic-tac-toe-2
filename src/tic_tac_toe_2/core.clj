@@ -3,4 +3,4 @@
   (:gen-class))
 
 (defn -main [& args]
-  (server-start (merge  (into  {} (System/getenv)) {"PORT" "3001"})))
+  (server-start (merge  (into  {} (System/getenv)) {})))

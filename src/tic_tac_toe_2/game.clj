@@ -11,7 +11,7 @@
   (int (Math/sqrt (count board))))
 
 (defn calc-offset [row column board]
-  (+ (* (calc-board-size board) row)   column))
+  (+ (* (calc-board-size board) row)  column))
 
 (defn occupy [board row column who]
   (let [offset (calc-offset row column board)]
@@ -91,8 +91,7 @@
 
 (defn random-board-offset [game-state]
   (let [ec (empty-cells (:current-board game-state))]
-    (if (> (count ec) 0)
-      (:offset (get ec (Math/round (rand (- (count ec) 1))))) -1)))
+    (:offset (get ec (Math/round (rand (- (count ec) 1)))))))
 
 (defn make-random-move [game-state]
   (make-move game-state {:offset (random-board-offset game-state)}))
@@ -152,30 +151,4 @@
       (conj game game-state)
       (recur  (game-round game-state (random-move game-state)) (conj game game-state)))))
 
-(defn row-to-string [row]
-  (->>
-   (map (fn [e] (if (= :e (:state e)) " " (upper-case (name (:state e))))) row)
-   (join "|")))
-
-(defn row-separator [size]
-  (join "+" (map (fn [_] "-") (range 0 size))))
-
-(defn board-to-string [board]
-  (join (str "\n" (row-separator (calc-board-size board)) "\n")
-        (for [r (range 0 (calc-board-size board))]
-          (row-to-string (row board r)))))
-
-(defn print-winner [game-state]
-  (cond (= (:winner game-state) nil) "GAME ENDS WITH A DRAW!"
-        :else (str "PLAYER " (:winner game-state) " WON")))
-
-(defn display-game [rounds]
-  (println "**************************************")
-  (println "new game ")
-  (println "**************************************")
-  (doseq [r rounds]
-    (println (board-to-string (:current-board r)))
-    (println "----------------------------")
-    (Thread/sleep 2000))
-  (println (print-winner (last rounds))))
 

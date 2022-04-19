@@ -24,8 +24,10 @@
 (deftest game-loop-tests
   (testing "game should finish "
     (is (= true (:game-over (last  (bot-game 3))))))
-  (testing "game should have a winner declared"
-    (is (some? (:winner (last  (bot-game 3)))))))
+  (testing "game should have a winner declared or should have all cells occupied"
+    (is (or
+         (some? (:winner (last  (bot-game 3))))
+         (board-full? (last  (bot-game 3)))))))
 
 (deftest game-state-tests
   (testing "given row winnig board it should evaluate it properly"
@@ -82,9 +84,15 @@
                              (occupy-game 0 0 :x)
                              (occupy-game 0 1 :o)
                              (occupy-game 0 2 :x)
-                             (occupy-game 1 0 :x)
+                             (occupy-game 1 0 :o)
                              (occupy-game 1 1 :o)
                              (occupy-game 1 2 :x)
-                             (occupy-game 2 0 :o)
-                             (occupy-game 2 1 :o)
-                             (game-round {:offset 8 :player :x}))))))))
+                             (occupy-game 2 0 :x)
+                             (occupy-game 2 1 :x)
+                             (assoc :next-player :o)
+                             (game-round {:offset 8 :player :o}))))))
+
+    (testing "if there is free cell and no winner game should be progressing"
+      (is (= false
+             (game-over? (-> (new-game 3)
+                             (game-round {:offset 8 :player :o}))))))))

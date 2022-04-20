@@ -8,7 +8,7 @@
             ConsumerPactBuilder ConsumerPactRunnerKt PactTestRun PactVerificationResult$Ok]
            [au.com.dius.pact.consumer.model MockProviderConfig]))
 
-(deftest example-clojure-consumer-pact-test
+(deftest healthcheck-test
   (let [consumer-pact (-> "clojure_test_consumer"
                           ConsumerPactBuilder/consumer
                           (.hasPactWith "test_provider")
@@ -29,3 +29,5 @@
                                  (:body
                                   (http-client/get
                                    (str (.getUrl mock-server) "/health")))))))))))))
+
+;(deftest game-creation-test)

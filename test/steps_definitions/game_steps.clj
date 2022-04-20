@@ -41,12 +41,15 @@
        (assoc state
               :game-state
               (-> (new-game 3)
-                  (occupy-game 0 0 :x)
-                  (occupy-game 0 1 :x))))
+                  (game-round {:offset 0 :player :x})
+                  (game-round {:offset 3 :player :o})
+                  (game-round {:offset 1 :player :x})
+                  (game-round {:offset 4 :player :o}))))
 
 (When "Player X places {int}rd cell in top row" [state int1]
       (assoc state :game-state
-             (game-round (:game-state state) {:offset 2 :player :x})))
+             (-> (:game-state state)
+                 (game-round {:offset 2 :player :x}))))
 
 (Then "Player X is winer of the game" [state]
       (is (= true (won? (get-in state [:game-state :current-board]) :x)))
@@ -95,11 +98,11 @@
          (is (= false (board-full? (:game-state state))))
          state))
 
-(When "When user X makes a move" [state]
-      (game-round (:game-state state) {:offset 2 :player :x}))
+(When "When player X makes a winning move" [state]
+      (assoc state :game-state (game-round (:game-state state) {:offset 2 :player :x})))
 
 (And "User X wins game" [state]
-     (is (= true (won? (:game-state state) :x)))
+     (is (= :x (winner? (:game-state state))))
      state)
 
 (Then "Game ends" [state]
@@ -107,18 +110,44 @@
 
 (Given "There only one free cell" [state]
        (assoc state :game-state (-> (new-game 3)
-                                    (occupy-game 0 0 :x)
+                                    (occupy-game 0 0 :o)
                                     (occupy-game 0 1 :x)
                                     (occupy-game 0 2 :x)
                                     (occupy-game 1 0 :x)
-                                    (occupy-game 1 1 :x)
-                                    (occupy-game 1 2 :x)
-                                    (occupy-game 2 0 :x)
+                                    (occupy-game 1 1 :o)
+                                    (occupy-game 1 2 :o)
+                                    (occupy-game 2 0 :o)
                                     (occupy-game 2 1 :x))))
 
+(Given "Game valid game" [state]
+       (assoc state :game-state (new-game 3)))
+
+(And "Player X is supposed to make move" [state]
+     state)
+
+(When "Player O tries to make a move" [state]
+      (assoc state :game-state (game-round (:game-state state) {:offset 1 :player :o})))
+
+(Then "Game state indicates that invalid tried to take a move" [state]
+      (is (= "Invalid user" (get-in state [:game-state :error])))
+      state)
+
+(When "Player make move on occupied cell" [state]
+      (assoc state :game-state (-> (:game-state state)
+                                   (game-round {:offset 0 :player :x})
+                                   (game-round  {:offset 0 :player :o}))))
+
+(Then "Game state indicates invalid move" [state]
+      (is (= "Invalid move" (get-in state [:game-state :error])))
+      state)
+
 (And "User X does not win" [state]
-     (occupy-game (:game-state state) 1 2 :o))
+     (is (= nil (winner? (:game-state state))))
+     state)
 
 (Then "Game ends with draw" [state]
-      draw
-      (pending!))
+      (is (= true (draw? (:game-state state))))
+      state)
+
+(When "When player X makes a move" [state]
+      (assoc state :game-state (game-round (:game-state state) {:offset 8 :player :x})))

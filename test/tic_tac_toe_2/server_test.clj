@@ -18,3 +18,5 @@
                 (http-client/get
                  (str "http://localhost:" port "/health")))))))
 
+(deftest create-new-game-api-tests
+  (testing "given valid board size it should return "))

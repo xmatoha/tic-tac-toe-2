@@ -83,6 +83,9 @@
 (defn empty-cells [board]
   (vec (filter (fn [e]  (= (:state e) :e)) board)))
 
+(defn empty-cell? [board offset]
+  (if (= :e (:state (nth board offset))) true  false))
+
 (defn make-move [game-state action]
   (assoc-in game-state
             [:current-board (:offset action)
@@ -123,6 +126,9 @@
     (assoc game-state :next-player :o)
     (assoc game-state :next-player :x)))
 
+(defn draw? [game-state]
+  (if (and (board-full? game-state) (not (winner? game-state))) true false))
+
 (defn game-over! [game-state]
   (cond
     (winner? game-state) (assoc game-state :game-over true)
@@ -132,13 +138,30 @@
 (defn game-over? [game-state]
   (:game-over game-state))
 
+(defn validate-action [game-state action]
+  (cond (not (empty-cell? (:current-board game-state) (:offset action)))
+        (assoc game-state :error "Invalid move")
+        (not (= (:next-player game-state) (:player action)))
+        (assoc game-state :error "Invalid user")
+        :else game-state))
+
+(defn clear-round-state [game-state]
+  (assoc game-state :error nil))
+
+(defn has-error? [game-state]
+  (:error game-state))
+
 (defn game-round [game-state action]
-  (-> game-state
-      (make-move action)
-      (switch-player!)
-      (board-full!)
-      (winner!)
-      (game-over!)))
+  (let [validated-state (-> game-state
+                            (clear-round-state)
+                            (validate-action action))]
+    (if (has-error? validated-state) validated-state
+        (-> validated-state
+            (make-move action)
+            (switch-player!)
+            (board-full!)
+            (winner!)
+            (game-over!)))))
 
 (defn random-move [game-state]
   {:offset (random-board-offset game-state) :player (:next-player game-state)})

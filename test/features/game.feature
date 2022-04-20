@@ -39,14 +39,24 @@ Feature: Game rules
 
       Scenario: Game ending with user X win
         Given There is free cell on game board
-        When When user X makes a move
+        When When player X makes a winning move
         And User X wins game
         Then Game ends
 
       Scenario: Game ending with draw
         Given There only one free cell
-        When When user X makes a move
+        When When player X makes a move
         And User X does not win
         Then Game ends with draw
-        
+
+      Scenario: Invalid move
+        Given Game valid game
+        When Player make move on occupied cell
+        Then Game state indicates invalid move
+
+      Scenario: Invalid player
+        Given Game valid game
+        And Player X is supposed to make move
+        When Player O tries to make a move
+        Then Game state indicates that invalid tried to take a move
 

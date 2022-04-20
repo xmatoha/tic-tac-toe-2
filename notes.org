@@ -82,8 +82,25 @@ CLOCK: [2022-04-12 Tue 15:06]--[2022-04-12 Tue 15:31] =>  0:25
 
 ** Pomodoro 10
 *** Goal build base api
-- [ ] healthcheck endpoint
+- [X] healthcheck endpoint
+
+
+** Pomodoro 11
+:LOGBOOK:
+CLOCK: [2022-04-20 Wed 09:55]--[2022-04-20 Wed 10:20] =>  0:25
+:END:
+*** Goal build base api, extend logic to validate user input
 - [ ] game creation
+- [X] game input validation
+
+** Pomodoro 12
+:LOGBOOK:
+CLOCK: [2022-04-20 Wed 09:55]--[2022-04-20 Wed 10:20] =>  0:25
+:END:
+*** api game play
+- [ ] game creation
+- [ ] game turns
+- [ ] game eval
 
 
 * Hihglights

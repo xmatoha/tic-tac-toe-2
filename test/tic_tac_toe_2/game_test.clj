@@ -97,3 +97,16 @@
       (is (= false
              (game-over? (-> (new-game 3)
                              (game-round {:offset 8 :player :o}))))))))
+
+(deftest action-input-validtion-tests
+  (testing "given user take action(move) and it is invalid move error should be returned"
+    (is (= "Invalid move" (:error  (-> (new-game 3)
+                                       (occupy-game 0 0 :x)
+                                       (game-round {:offset 0 :player :x}))))))
+  (testing "given user takes move and it is user that is upposed to make trun move succeded"
+    (is (= nil (:error  (-> (new-game 3)
+                            (game-round {:offset 1 :player :x}))))))
+  (testing "given user takes move and it is not his turn, error is returned"
+    (is (= "Invalid user" (:error  (-> (new-game 3)
+                                       (occupy-game 0 0 :x)
+                                       (game-round {:offset 1 :player :o})))))))

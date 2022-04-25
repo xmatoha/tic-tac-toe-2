@@ -10,3 +10,18 @@ repos:
     - id: conventional-pre-commit
       stages: [commit-msg]
       args: [] # optional: list of Conventional Commits types to allow
+- repo: local
+  hooks:
+    - id: clj-kondo
+      name: clj-kondo linter
+      entry: bash -c "clj-kondo --lint src"
+      language: system
+      pass_filenames: false
+
+- repo: local
+  hooks:
+    - id: lein-test
+      name: lein test
+      entry: bash -c "lein test"
+      language: system
+      pass_filenames: false

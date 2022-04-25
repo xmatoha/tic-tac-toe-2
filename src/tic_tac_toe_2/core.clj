@@ -2,5 +2,5 @@
   (:require [tic-tac-toe-2.server :refer [server-start]])
   (:gen-class))
 
-(defn -main [& args]
+(defn -main [& _]
   (server-start (merge  (into  {} (System/getenv)) {})))

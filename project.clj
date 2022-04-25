@@ -24,7 +24,7 @@
   :jvm-opts ["-XX:TieredStopAtLevel=1", "-Xmx512m"]
   :pact {:service-providers {:test_provider {:protocol "http"
                                              :host "localhost"
-                                             :port 3001
+                                             :port 3000
                                              :path  "/"
                                              :has-pact-with
                                              {:clojure_test_consumer {:pact-source "file:./target/pacts/clojure_test_consumer-test_provider.json"}}}}}

@@ -8,6 +8,7 @@
                  [metosin/reitit "0.5.17"]
                  [clj-http "3.12.3"]
                  [cheshire "5.10.2"]
+                 [org.clojure/tools.cli "1.0.206"]
                  [lambdaisland/kaocha-cucumber "0.0-53"]
                  [lambdaisland/kaocha-cloverage "1.0.75"]
                  [nubank/mockfn "0.7.0"]
@@ -27,7 +28,7 @@
                                              :port 3000
                                              :path  "/"
                                              :has-pact-with
-                                             {:clojure_test_consumer {:pact-source "file:./target/pacts/clojure_test_consumer-test_provider.json"}}}}}
+                                             {:clojure_test_consumer {:pact-source "file:./target/pacts/test_consumer-test_provider.json"}}}}}
 
   :profiles {:pact {:plugins [[au.com.dius.pact.provider/lein "4.1.20"
                                :exclusions [commons-logging]]] :dependencies

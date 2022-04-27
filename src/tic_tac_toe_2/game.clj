@@ -152,16 +152,17 @@
   (:error game-state))
 
 (defn game-round [game-state action]
-  (let [validated-state (-> game-state
-                            (clear-round-state)
-                            (validate-action action))]
-    (if (has-error? validated-state) validated-state
-        (-> validated-state
-            (make-move action)
-            (switch-player!)
-            (board-full!)
-            (winner!)
-            (game-over!)))))
+  (if (game-over? game-state) game-state
+      (let [validated-state (-> game-state
+                                (clear-round-state)
+                                (validate-action action))]
+        (if (has-error? validated-state) validated-state
+            (-> validated-state
+                (make-move action)
+                (switch-player!)
+                (board-full!)
+                (winner!)
+                (game-over!))))))
 
 (defn random-move [game-state]
   {:offset (random-board-offset game-state) :player (:next-player game-state)})

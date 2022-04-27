@@ -32,17 +32,19 @@
 
 (deftest game-state-tests
   (testing "given row winnig board it should evaluate it properly"
-    (is (= true (-> (empty-board 3)
-                    (occupy 0 0 :x)
-                    (occupy 1 0 :x)
-                    (occupy 2 0 :x)
-                    (won? :x)))))
+    (is (= :x (-> (new-game 3)
+                  (occupy-game 0 0 :x)
+                  (occupy-game 1 0 :x)
+                  (occupy-game 2 0 :x)
+                  (winner!)
+                  (:winner)))))
   (testing "given column winnig board it should evaluate it properly"
-    (is (= true (-> (empty-board 3)
-                    (occupy 0 0 :x)
-                    (occupy 0 1 :x)
-                    (occupy 0 2 :x)
-                    (won? :x)))))
+    (is (= :o (-> (new-game 3)
+                  (occupy-game 0 0 :o)
+                  (occupy-game 0 1 :o)
+                  (occupy-game 0 2 :o)
+                  (winner!)
+                  (:winner)))))
   (testing "given asc diagnoale winnig board it should evaluate it properly"
     (is (= true (-> (empty-board 3)
                     (occupy 0 0 :x)
@@ -71,6 +73,9 @@
                    (count))))))
 
 (deftest eval-game-round-tests
+  (testing "if game is in end state (game-over) game does not progress"
+    (let [g (-> (new-game 3) (assoc :game-over true))]
+      (is (= g (game-round g {:offset 0 :player :x})))))
   (testing "after game round finished evaluate if game ended"
     (testing "if there is winner defined, game ends"
       (is (= true
@@ -81,19 +86,19 @@
 
     (testing "if there is not free cell on board and there is no winner defined, game ends with draw"
       (is (= true
-             (game-over? (-> (new-game 3)
-                             (occupy-game 0 0 :x)
-                             (occupy-game 0 1 :o)
-                             (occupy-game 0 2 :x)
-                             (occupy-game 1 0 :o)
-                             (occupy-game 1 1 :o)
-                             (occupy-game 1 2 :x)
-                             (occupy-game 2 0 :x)
-                             (occupy-game 2 1 :x)
-                             (assoc :next-player :o)
-                             (game-round {:offset 8 :player :o}))))))
+             (draw? (-> (new-game 3)
+                        (occupy-game 0 0 :x)
+                        (occupy-game 0 1 :o)
+                        (occupy-game 0 2 :x)
+                        (occupy-game 1 0 :o)
+                        (occupy-game 1 1 :o)
+                        (occupy-game 1 2 :x)
+                        (occupy-game 2 0 :x)
+                        (occupy-game 2 1 :x)
+                        (assoc :next-player :o)
+                        (game-round {:offset 8 :player :o}))))))
 
-    (testing "if there is free cell and no winner game should be progressing"
+    (testing "if there is free cell and no winner, game should be progressing"
       (is (= false
              (game-over? (-> (new-game 3)
                              (game-round {:offset 8 :player :o}))))))))
@@ -110,3 +115,5 @@
     (is (= "Invalid user" (:error  (-> (new-game 3)
                                        (occupy-game 0 0 :x)
                                        (game-round {:offset 1 :player :o})))))))
+
+

@@ -2,6 +2,9 @@
 
 (defonce game-store (atom {}))
 
+(defn game-id []
+  (java.util.UUID/randomUUID))
+
 (defn persist-game [game-id game-state]
   (reset! game-store {game-id game-state}))
 

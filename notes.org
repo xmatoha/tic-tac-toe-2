@@ -115,3 +115,8 @@ CLOCK: [2022-04-20 Wed 09:55]--[2022-04-20 Wed 10:20] =>  0:25
 - 2. refactoring, make game state universal interface how game progresses
 - 3. build new game with possiblity to play human vs human
 - 4. packt cumbersome simulate complex interactions
+* GAPS
+- pact verification after deployment
+- api configuration
+- robustnes for cli params checking
+- server config testing

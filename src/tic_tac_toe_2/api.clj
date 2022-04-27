@@ -18,6 +18,6 @@
           offset (calc-offset row col (:current-board game))
           game-round-result (game-round game {:player (keyword player) :offset  offset})]
       (persist-game game-id game-round-result)
-      {:status 200 :body game-round-result})))
+      {:status 200 :body  game-round-result})))
 
 

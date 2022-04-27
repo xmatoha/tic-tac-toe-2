@@ -2,16 +2,17 @@
   (:require
    [muuntaja.interceptor]
    [reitit.http :as http]
+   [malli.util :as mu]
+   [reitit.ring.middleware.parameters :as parameters]
    [reitit.interceptor.sieppari :as sieppari]
    [reitit.ring :as ring]
    [muuntaja.core :as m]
    [reitit.coercion.schema]
-   [reitit.http.interceptors.exception :as exception]
+   [reitit.ring.middleware.exception :as exception]
    [reitit.coercion.spec]
-   [reitit.http.coercion :as coercion]
+   [reitit.ring.coercion :as coercion]
    [reitit.coercion.malli]
-   [reitit.http.interceptors.muuntaja :as muuntaja]
-   [reitit.http.interceptors.parameters :as parameters]
+   [reitit.ring.middleware.muuntaja :as muuntaja]
    [ring.adapter.jetty :as jetty]
    [reitit.dev.pretty :as pretty]
    [reitit.swagger :as swagger]
@@ -38,25 +39,25 @@
            :handler health-handler}}]
    ["/game"
     {:put {:summary "creates new game"
-           :reponses
-           {200
+           :responses
+           {201
             {:body
              [:map
               [:game-id string?]
               [:game [:map
-                      [:next-player string?]
-                      [:winner {:optional true} string?]
+                      [:next-player keyword?]
+                      [:winner {:optional true} any?]
                       [:error {:optional true} string?]
                       [:game-over {:optional true} boolean?]
                       [:current-board
-                       [:vector [:map
-                                 [:offset int?]
-                                 [:state string?]]]]]]]}}
-           :coercion reitit.coercion.malli/coercion
+                       [:sequential [:map
+                                     [:offset int?]
+                                     [:state keyword?]]]]]]]}}
+
            :parameters {:body [:map [:board-size pos-int?]]}
            :handler create-new-game-handler}
      :post {:summary "make game move"
-            :coercion reitit.coercion.malli/coercion
+
             :parameters {:body
 
                          [:map
@@ -65,16 +66,16 @@
                           [:row int?]
                           [:col int?]]}
 
-            ;; :responses {200 {:body
-            ;;                  [:map
-            ;;                   [:next-player string?]
-            ;;                   [:winner {:optional true} string?]
-            ;;                   [:error {:optional true} string?]
-            ;;                   [:game-over {:optional true} boolean?]
-            ;;                   [:current-board
-            ;;                    [:vector [:map
-            ;;                              [:offset int?]
-            ;;                              [:state string?]]]]]}}
+            :responses {200 {:body
+                             [:map
+                              [:next-player keyword?]
+                              [:winner {:optional true} any?]
+                              [:error {:optional true} any?]
+                              [:game-over {:optional true} boolean?]
+                              [:current-board
+                               [:sequential [:map
+                                             [:offset int?]
+                                             [:state keyword?]]]]]}}
 
             :handler game-move-handler}}]])
 
@@ -82,18 +83,40 @@
   (http/ring-handler
    (http/router
     routes
-    {:exception pretty/exception
-     :data {:coercion reitit.coercion.schema/coercion
+    {;;:reitit.middleware/transform dev/print-request-diffs ;; pretty diffs
+       ;;:validate spec/validate ;; enable spec validation for route data
+       ;;:reitit.spec/wrap spell/closed ;; strict top-level validation
+     :exception pretty/exception
+     :data {:coercion (reitit.coercion.malli/create
+                       {;; set of keys to include in error messages
+                        :error-keys #{#_:type :coercion :in :schema :value :errors :humanized #_:transformed}
+                           ;; schema identity function (default: close all map schemas)
+                        :compile mu/closed-schema
+                           ;; strip-extra-keys (effects only predefined transformers)
+                        :strip-extra-keys true
+                           ;; add/set default values
+                        :default-values true
+                           ;; malli options
+                        :options nil})
             :muuntaja m/instance
-            :interceptors [swagger/swagger-feature
-                           (parameters/parameters-interceptor)
-                           (muuntaja/format-negotiate-interceptor)
-                           (muuntaja/format-response-interceptor)
-                           (exception/exception-interceptor)
-                           (muuntaja/format-request-interceptor)
-                           (coercion/coerce-response-interceptor)
-                           (coercion/coerce-request-interceptor)]}})
-
+            :middleware [;; swagger feature
+                         swagger/swagger-feature
+                           ;; query-params & form-params
+                         parameters/parameters-middleware
+                           ;; content-negotiation
+                         muuntaja/format-negotiate-middleware
+                           ;; encoding response body
+                         muuntaja/format-response-middleware
+                           ;; exception handling
+                         exception/exception-middleware
+                           ;; decoding request body
+                         muuntaja/format-request-middleware
+                           ;; coercing response bodys
+                         coercion/coerce-response-middleware
+                           ;; coercing request parameters
+                         coercion/coerce-request-middleware
+                           ;; multipart
+                         ]}})
    (ring/routes
     (swagger-ui/create-swagger-ui-handler
      {:path "/api"

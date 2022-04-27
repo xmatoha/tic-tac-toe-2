@@ -111,10 +111,11 @@ CLOCK: [2022-04-20 Wed 09:55]--[2022-04-20 Wed 10:20] =>  0:25
 
 
 * Hihglights
-- 1. refactoring, extracting bot random move logic from game loop
-- 2. refactoring, make game state universal interface how game progresses
-- 3. build new game with possiblity to play human vs human
-- 4. packt cumbersome simulate complex interactions
+- refactoring, extracting bot random move logic from game loop
+- refactoring, make game state universal interface how game progresses
+- build new game with possiblity to play human vs human
+- packt cumbersome simulate complex interactions
+- malli reitit powerful but complex
 * GAPS
 - pact verification after deployment
 - api configuration

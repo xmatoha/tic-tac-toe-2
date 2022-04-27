@@ -1,7 +1,11 @@
 (ns tic-tac-toe-2.api-test
   (:require [clojure.test :refer [deftest testing is]]
             [tic-tac-toe-2.game :refer [new-game]]
-            [tic-tac-toe-2.api :refer [create-new-game-handler game-move-handler]]))
+            [tic-tac-toe-2.api :refer [health-handler create-new-game-handler game-move-handler]]))
+
+(deftest healtcheck-handler-test
+  (testing "when healt is invoked it should return ok"
+    (is {:msg "ok"} (:body (health-handler [{}])))))
 
 (deftest create-new-game-hadnler-tests
   (testing "given board-size it should create new game persist it and return game id"
@@ -30,4 +34,4 @@
              {:offset 8, :state :e}],
             :winner nil,
             :game-over false,
-            :error nil} (:body ((game-move-handler (fn [_] (new-game 3))) {:parameters {:body  {:player :x :row 0 :col 1}}}))))))
+            :error nil} (:body ((game-move-handler (fn [_ _] (new-game 3)) (fn [_] (new-game 3))) {:parameters {:body  {:player :x :row 0 :col 1}}}))))))

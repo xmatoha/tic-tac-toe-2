@@ -4,6 +4,7 @@
                  [clj-kondo "2022.03.09"]
                  [org.clojure/clojure "1.10.0"]
                  [ring/ring-jetty-adapter "1.7.1"]
+                 [babashka/babashka.curl "0.1.2"]
                  [aleph "0.4.7-alpha5"]
                  [metosin/reitit "0.5.17"]
                  [clj-http "3.12.3"]
@@ -16,6 +17,8 @@
   :main ^:skip-aot tic-tac-toe-2.core
   :target-path "target/%s"
   :aliases {"test" ["with-profile" "+kaocha" "run" "-m" "kaocha.runner" "unit"]
+            "test-all" ["with-profile" "+kaocha" "run" "-m" "kaocha.runner" "unit" "integration"]
+            "itest" ["with-profile" "+kaocha" "run" "-m" "kaocha.runner" "integration"]
             "features" ["with-profile" "+kaocha" "run" "-m" "kaocha.runner" "features"]
             "watch" ["with-profile" "+kaocha" "run" "-m" "kaocha.runner" "--fail-fast" "--watch" "unit"]
             "lint" ["run" "-m" "clj-kondo.main" "--lint" "src"]}

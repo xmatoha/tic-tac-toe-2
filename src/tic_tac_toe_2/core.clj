@@ -6,7 +6,7 @@
 
 (defn default-routes []
   (routes (create-new-game-handler persist-game game-id)
-          (game-move-handler game-by-id)))
+          (game-move-handler persist-game game-by-id)))
 
 (defn -main [& _]
   (server-start (merge  (into  {} (System/getenv)) {}) (default-routes)))

@@ -14,9 +14,9 @@
     (let [game-state (new-game 3)
           game-id (game-id)]
       (is (= (persist-game game-id game-state) @game-store))))
-  (testing "retrieve game state by id"
+  (testing "it should retrieve game state by id"
     (let [game-state (new-game 3)
-          game-id (game-id)
-          game (persist-game game-id game-state)]
+          game-id (.toString (game-id))
+          _ (persist-game game-id game-state)]
       (is (= game-state (game-by-id game-id))))))
 

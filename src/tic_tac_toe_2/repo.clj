@@ -6,7 +6,8 @@
   (java.util.UUID/randomUUID))
 
 (defn persist-game [game-id game-state]
-  (reset! game-store {game-id game-state}))
+  (reset! game-store {(.toString game-id) game-state}))
 
 (defn game-by-id [game-id]
+  (println "game-store: " @game-store)
   (get @game-store game-id))

@@ -16,7 +16,8 @@
    [reitit.dev.pretty :as pretty]
    [reitit.swagger :as swagger]
    [reitit.swagger-ui :as swagger-ui]
-   [tic-tac-toe-2.api :refer [health-handler]]))
+   [tic-tac-toe-2.repo :refer [persist-game game-by-id game-id]]
+   [tic-tac-toe-2.api :refer [health-handler create-new-game-handler game-move-handler]]))
 
 (defonce server-handle (atom {}))
 
@@ -55,23 +56,26 @@
            :parameters {:body [:map [:board-size pos-int?]]}
            :handler create-new-game-handler}
      :post {:summary "make game move"
+            :coercion reitit.coercion.malli/coercion
             :parameters {:body
+
                          [:map
                           [:game-id string?]
                           [:player string?]
                           [:row int?]
                           [:col int?]]}
-            :responses {200 {:body
-                             [:map
-                              [:next-player string?]
-                              [:winner {:optional true} string?]
-                              [:error {:optional true} string?]
-                              [:game-over {:optional true} boolean?]
-                              [:current-board
-                               [:vector [:map
-                                         [:offset int?]
-                                         [:state string?]]]]]}}
-            :coercion reitit.coercion.malli/coercion
+
+            ;; :responses {200 {:body
+            ;;                  [:map
+            ;;                   [:next-player string?]
+            ;;                   [:winner {:optional true} string?]
+            ;;                   [:error {:optional true} string?]
+            ;;                   [:game-over {:optional true} boolean?]
+            ;;                   [:current-board
+            ;;                    [:vector [:map
+            ;;                              [:offset int?]
+            ;;                              [:state string?]]]]]}}
+
             :handler game-move-handler}}]])
 
 (defn app-with-deps [routes]
@@ -106,8 +110,11 @@
   (println "Stopping server ...")
   (.stop @server-handle))
 
-(comment (do
-           (server-stop)
-           (server-start {"PORT" 3000} (routes (fn [_ _]) (fn [])))))
+(defn restart-server []
+  (when @server-handle (server-stop))
+  (server-start {"PORT" "3000"}
+                (routes (create-new-game-handler persist-game  game-id) (game-move-handler persist-game game-by-id))))
 
+(comment (restart-server))
+(comment (server-stop))
 

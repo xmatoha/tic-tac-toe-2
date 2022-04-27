@@ -5,7 +5,7 @@
              [tic-tac-toe-2.api :refer [create-new-game-handler game-move-handler]]
              [tic-tac-toe-2.server :refer [server-start server-stop routes app-with-deps]]
              [clj-http.client :as http-client]
-             [tic-tac-toe-2.repo :refer [game-id]]
+             [tic-tac-toe-2.repo :refer [game-id game-by-id]]
              [cheshire.core :refer [generate-string parse-string]]))
 
 (def port "3000")
@@ -13,7 +13,7 @@
 (defn server-fixture [f]
   (mfn/providing
    [(game-id) "game-id"]
-   (server-start {"PORT" port} (routes (create-new-game-handler (fn [_ _]) game-id) (game-move-handler (fn [_] (new-game 3)))))
+   (server-start {"PORT" port} (routes (create-new-game-handler (fn [_ _]) game-id) (game-move-handler (fn [_ _]) (fn [_] (new-game 3)))))
    (f)
    (server-stop)))
 
@@ -28,6 +28,11 @@
 (deftest ^:integration create-game-test
   (testing "given board size it should create new game board"
     (is (=
-         {:game-id "game-id"}
+         {:game-id "game-id",
+          :game
+          {:next-player "x",
+           :current-board [{:offset 0, :state "e"}],
+           :winner nil,
+           :game-over false}}
          (parse-string  (:body (http-client/put (str "http://localhost:" port "/game") {:throw-exceptions false :content-type :json :body (generate-string {:board-size 1})})) true)))))
 

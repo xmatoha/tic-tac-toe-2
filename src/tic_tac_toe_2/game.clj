@@ -10,6 +10,7 @@
   (int (Math/sqrt (count board))))
 
 (defn calc-offset [row column board]
+  (println "board size: " (calc-board-size board))
   (+ (* (calc-board-size board) row)  column))
 
 (defn occupy [board row column who]
